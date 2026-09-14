@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/Elementos de la solución/">
+    <File Path=".dockerignore" />
+    <File Path="Dockerfile" />
+  </Folder>
   <Project Path="EcommerceApp/EcommerceApp.csproj" />
 </Solution>
