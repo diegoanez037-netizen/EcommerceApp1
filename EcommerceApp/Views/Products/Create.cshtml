@@ -1,0 +1,59 @@
+﻿@model EcommerceApp.Models.Product
+
+@{
+    ViewData["Title"] = "Catálogo";
+}
+<div class="form-page-wrapper">
+    <div class="form-page-card">
+        <h2 class="form-page-title">Agregar bebida</h2>
+        <p class="form-page-subtitle">Completa los datos del nuevo producto para el catálogo.</p>
+
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Name">Nombre</label>
+                <input asp-for="Name" class="form-control" placeholder="Ej: Singani Casa Real" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description">Descripción</label>
+                <textarea asp-for="Description" class="form-control" placeholder="Ej: Singani boliviano de 750 ml"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Price">Precio (Bs)</label>
+                <input asp-for="Price" class="form-control" placeholder="Ej: 85.00" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Stock">Stock (unidades disponibles)</label>
+                <input asp-for="Stock" class="form-control" placeholder="Ej: 10" />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ImageUrl">Imagen (URL, opcional)</label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Category">Categoría</label>
+                <input asp-for="Category" class="form-control" placeholder="Ej: Vodka, Cerveza, Tequila" />
+            </div>
+
+            <div class="form-page-actions">
+                <button type="submit" class="btn-primary">Guardar bebida</button>
+                <a href="@Url.Action("Index")" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

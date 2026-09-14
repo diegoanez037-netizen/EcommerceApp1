@@ -1,0 +1,25 @@
+﻿@model EcommerceApp.Models.Product
+
+@{
+    ViewData["Title"] = "Catálogo";
+}
+<div class="details-wrapper">
+    <div class="details-image">
+        <img src="@(Model.ImageUrl ?? "/images/default-product.jpg")" alt="@Model.Name" />
+    </div>
+
+    <div class="details-info">
+        @if (!string.IsNullOrEmpty(Model.Category))
+        {
+            <span class="details-category">@Model.Category</span>
+        }
+
+        <h1 class="details-title">@Model.Name</h1>
+        <p class="details-description">@Model.Description</p>
+
+        <div class="details-price">@Model.Price.ToString("0.00") Bs</div>
+        <p class="details-stock">@Model.Stock unidades disponibles</p>
+
+        <a href="@Url.Action("Index")" class="details-back">← Volver al catálogo</a>
+    </div>
+</div>

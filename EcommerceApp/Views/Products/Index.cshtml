@@ -1,0 +1,142 @@
+﻿@model List<EcommerceApp.Models.Product>
+
+@{
+    ViewData["Title"] = "Catálogo";
+}
+<section class="hero">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1 class="hero-title">
+                El buen trago<br><em>tiene nombre.</em>
+            </h1>
+            <p class="hero-sub">
+                Una selección curada de licores, vinos y cervezas de todo Bolivia,
+                elegidos por su carácter, no por su etiqueta.
+            </p>
+            <div class="hero-stats">
+                <div>
+                    <span class="hero-stat-number">@Model.Count</span>
+                    <span class="hero-stat-label">Bebidas disponibles</span>
+                </div>
+                <div>
+                    <span class="hero-stat-number">@ViewBag.TotalCategories</span>
+                    <span class="hero-stat-label">Categorías</span>
+                </div>
+                <div>
+                    <span class="hero-stat-number">100%</span>
+                    <span class="hero-stat-label">Origen boliviano</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<h2 class="section-title">La selección</h2>
+
+@if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+{
+    <a href="@Url.Action("Create")" class="btn btn-agregar-bebida mb-4 d-inline-block">
+        + Agregar bebida
+    </a>
+}
+
+<form method="get" asp-action="Index" class="filter-bar">
+    <input type="text"
+           name="search"
+           value="@ViewBag.CurrentSearch"
+           class="form-control search-input"
+           placeholder="Buscar por nombre o descripción..." />
+
+    <button type="submit" class="btn-search">Buscar</button>
+
+    @if (!string.IsNullOrEmpty((string?)ViewBag.CurrentSearch) || !string.IsNullOrEmpty((string?)ViewBag.CurrentCategory))
+    {
+        <a asp-action="Index" class="btn-clear-filter">Limpiar filtros</a>
+    }
+</form>
+
+<div class="category-filters">
+    <a asp-action="Index"
+       asp-route-search="@ViewBag.CurrentSearch"
+       class="category-pill @(ViewBag.CurrentCategory == null ? "active" : "")">
+        Todas
+    </a>
+    @foreach (var cat in ViewBag.Categories)
+    {
+        <a asp-action="Index"
+           asp-route-category="@cat"
+           asp-route-search="@ViewBag.CurrentSearch"
+           class="category-pill @(ViewBag.CurrentCategory == cat ? "active" : "")">
+            @cat
+        </a>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <h3>No encontramos bebidas con esos filtros</h3>
+        <p>Intenta con otra palabra o quita el filtro de categoría.</p>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            var stockPercent = Math.Min(100, (product.Stock * 100) / 30);
+
+            <div class="col-md-4 mb-4">
+                <div class="product-card h-100">
+
+                    @if (!string.IsNullOrEmpty(product.Category))
+                    {
+                        <span class="category-ribbon">@product.Category</span>
+                    }
+
+                    @if (product.Stock > 0 && product.Stock <= 5)
+                    {
+                        <span class="low-stock-badge">Últimas unidades</span>
+                    }
+
+                    <img src="@(product.ImageUrl ?? "/images/default-product.jpg")"
+                         class="card-img-top w-100"
+                         alt="@product.Name"
+                         style="height: 240px; object-fit: contain;" />
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+
+                        <div class="price-row">
+                            <div>
+                                <span class="price-tag">@product.Price.ToString("0.00") Bs</span>
+                                <span class="price-note">Precio final, IVA incluido</span>
+                            </div>
+                            <span class="stock-info">@product.Stock unidades</span>
+                        </div>
+                        <div class="stock-bar">
+                            <div class="stock-bar-fill" style="width:@(stockPercent)%;"></div>
+                        </div>
+
+                        <div class="card-actions">
+                            <a href="@Url.Action("Details", new { id = product.Id })" class="btn-ver">
+                                Ver detalles
+                            </a>
+
+                            @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                            {
+                                <a href="@Url.Action("Edit", new { id = product.Id })" class="btn-editar">
+                                    Editar
+                                </a>
+                                <a href="@Url.Action("Delete", new { id = product.Id })" class="btn-eliminar">
+                                    Eliminar
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

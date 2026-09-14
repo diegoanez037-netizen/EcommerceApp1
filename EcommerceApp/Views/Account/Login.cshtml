@@ -1,0 +1,43 @@
+﻿@model EcommerceApp.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Catálogo";
+}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2 class="auth-title">Bienvenido de nuevo</h2>
+        <p class="auth-subtitle">Inicia sesión para seguir explorando el catálogo.</p>
+
+        <form asp-action="Login" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email">Correo electrónico</label>
+                <input asp-for="Email" class="form-control" placeholder="tucorreo@ejemplo.com" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Password">Contraseña</label>
+                <input asp-for="Password" class="form-control" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check mb-2">
+                <input asp-for="RememberMe" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label">Recordarme</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+        </form>
+
+        <div class="auth-footer-link">
+            ¿No tienes cuenta? <a href="@Url.Action("Register")">Regístrate aquí</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

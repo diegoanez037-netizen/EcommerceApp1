@@ -1,0 +1,20 @@
+﻿@model EcommerceApp.Models.Product
+
+<div class="delete-wrapper">
+    <div class="delete-card">
+        <p class="delete-warning">ESTA ACCIÓN NO SE PUEDE DESHACER</p>
+        <h2 class="delete-title">¿Eliminar esta bebida?</h2>
+
+        <p class="delete-product-name">@Model.Name</p>
+        <p class="delete-product-desc">@Model.Description</p>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="delete-actions">
+                <button type="submit" class="btn-confirm-delete">Sí, eliminar</button>
+                <a href="@Url.Action("Index")" class="btn-cancel-delete">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
