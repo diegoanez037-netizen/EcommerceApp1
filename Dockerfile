@@ -18,6 +18,16 @@ RUN dotnet publish "EcommerceApp.csproj" \
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 
+# Instalar dependencias nativas para FastReport en Linux (Render)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgdiplus \
+    libc6-dev \
+    libfontconfig1 \
+    fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/* \
+    && (ln -s /usr/lib/x86_64-linux-gnu/libgdiplus.so /usr/lib/libgdiplus.so 2>/dev/null || true) \
+    && ldconfig
+
 WORKDIR /app
 
 COPY --from=build /app/publish .
