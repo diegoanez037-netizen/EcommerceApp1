@@ -7,6 +7,9 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar FastReport para entorno Web (evita inicializaciones de escritorio/WinForms)
+FastReport.Utils.Config.WebMode = true;
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("postgresql")));
 

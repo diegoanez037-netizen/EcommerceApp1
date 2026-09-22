@@ -65,6 +65,7 @@ namespace EcommerceApp.Controllers
             // 4. Cargar la plantilla del reporte
             string rutaPlantilla = Path.Combine(_env.ContentRootPath, "Reports", "CatalogoProductos.frx");
 
+            FastReport.Utils.Config.WebMode = true;
             using var reporte = new Report();
             reporte.Load(rutaPlantilla);
 

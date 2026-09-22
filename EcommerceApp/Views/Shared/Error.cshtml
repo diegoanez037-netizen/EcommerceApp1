@@ -24,6 +24,16 @@
         <p><strong>Ruta que falló:</strong> <code>@exceptionFeature.Path</code></p>
         <p><strong>Tipo de error:</strong> <code>@exceptionFeature.Error.GetType().FullName</code></p>
         <p><strong>Mensaje:</strong> @exceptionFeature.Error.Message</p>
+
+        @if (exceptionFeature.Error.InnerException != null)
+        {
+            <div style="background: #3b1818; padding: 10px; border-radius: 4px; margin-top: 10px; border-left: 4px solid #ff4757;">
+                <p style="margin: 0; font-weight: bold; color: #ff6b81;">Causa interna (InnerException):</p>
+                <p style="margin: 5px 0 0 0; color: #ffffff;">@exceptionFeature.Error.InnerException.Message</p>
+                <pre style="margin: 5px 0 0 0; font-size: 0.75rem; color: #ffcccc; overflow-x: auto; white-space: pre-wrap;">@exceptionFeature.Error.InnerException.ToString()</pre>
+            </div>
+        }
+
         <details style="margin-top: 1rem;">
             <summary style="cursor: pointer; color: #fab1a0;">Ver traza completa (Stack Trace)</summary>
             <pre style="background-color: #1a0a0a; color: #fab1a0; padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; font-size: 0.8rem; white-space: pre-wrap;">@exceptionFeature.Error.ToString()</pre>
