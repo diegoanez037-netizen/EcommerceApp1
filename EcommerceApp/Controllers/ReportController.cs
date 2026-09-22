@@ -87,7 +87,8 @@ namespace EcommerceApp.Controllers
             reporte.Export(exportPdf, ms);
             ms.Position = 0;
 
-            return File(ms.ToArray(), "application/pdf", "CatalogoProductos.pdf");
+            Response.Headers.Append("Content-Disposition", "inline; filename=\"CatalogoProductos.pdf\"");
+            return File(ms.ToArray(), "application/pdf");
         }
     }
 }

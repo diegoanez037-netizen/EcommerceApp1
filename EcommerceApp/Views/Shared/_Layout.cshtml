@@ -38,7 +38,7 @@
                             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Catálogo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Report" asp-action="Catalogo">📄 Reporte</a>
+                            <a class="nav-link" asp-area="" asp-controller="Report" asp-action="Catalogo" target="_blank">📄 Reporte</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
@@ -49,8 +49,15 @@
                             var cartCount = 0;
                             if (User.Identity != null && User.Identity.IsAuthenticated)
                             {
-                                var uid = UserManager.GetUserId(User);
-                                cartCount = DbContext.CartItems.Count(c => c.UserId == uid);
+                                try
+                                {
+                                    var uid = UserManager.GetUserId(User);
+                                    cartCount = DbContext.CartItems.Count(c => c.UserId == uid);
+                                }
+                                catch
+                                {
+                                    cartCount = 0;
+                                }
                             }
                         }
 
