@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/21/2026" ReportInfo.Modified="09/21/2026" ReportInfo.CreatorVersion="2026.2.8">
+  <Dictionary>
+    <TableDataSource Name="Productos" ReferenceName="Productos" DataType="System.Int32" Enabled="true">
+      <Column Name="Numero"      DataType="System.Int32"/>
+      <Column Name="Nombre"      DataType="System.String"/>
+      <Column Name="Categoria"   DataType="System.String"/>
+      <Column Name="Descripcion" DataType="System.String"/>
+      <Column Name="Precio"      DataType="System.String"/>
+      <Column Name="Stock"       DataType="System.Int32"/>
+      <Column Name="ValorStock"  DataType="System.String"/>
+    </TableDataSource>
+    <Parameter Name="TotalProductos"  DataType="System.Int32"/>
+    <Parameter Name="PrecioPromedio"  DataType="System.String"/>
+    <Parameter Name="ValorInventario" DataType="System.String"/>
+    <Parameter Name="FechaEmision"    DataType="System.String"/>
+  </Dictionary>
+
+  <ReportPage Name="Page1" PaperWidth="210" PaperHeight="297"
+              LeftMargin="15" RightMargin="15" TopMargin="10" BottomMargin="10">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ENCABEZADO ÚNICO: título + subtítulo + fecha + cabecera col.
+         Ancho total = 680u (180mm × 3.78)
+         ═══════════════════════════════════════════════════════════════ -->
+    <PageHeaderBand Name="PageHeader1" Top="0" Left="0" Width="680" Height="120">
+
+      <!-- Barra de color oscuro de fondo (toda la zona del título) -->
+      <TextObject Name="bgDark"
+                  Left="0" Top="0" Width="680" Height="76"
+                  Text="" FillColor="21,16,12"
+                  Border.Lines="None"/>
+
+      <!-- Franja dorada decorativa izquierda -->
+      <TextObject Name="accentBar"
+                  Left="0" Top="0" Width="8" Height="76"
+                  Text="" FillColor="198,143,82"
+                  Border.Lines="None"/>
+
+      <!-- Logo / identificador institucional -->
+      <TextObject Name="LogoText"
+                  Left="16" Top="8" Width="200" Height="30"
+                  Text="🍶 Casa Andina"
+                  Font="Arial, 14pt, Bold" TextColor="198,143,82"
+                  HorzAlign="Left" VertAlign="Center"/>
+
+      <!-- Subtítulo de la empresa -->
+      <TextObject Name="EmpresaSub"
+                  Left="16" Top="38" Width="300" Height="22"
+                  Text="Licorería · Cochabamba, Bolivia"
+                  Font="Arial, 8pt" TextColor="180,160,140"
+                  HorzAlign="Left" VertAlign="Center"/>
+
+      <!-- Título del reporte -->
+      <TextObject Name="TituloReporte"
+                  Left="16" Top="60" Width="400" Height="16"
+                  Text="CATÁLOGO DE PRODUCTOS"
+                  Font="Arial, 9pt, Bold" TextColor="255,255,255"
+                  HorzAlign="Left" VertAlign="Center"/>
+
+      <!-- Fecha de emisión (derecha) -->
+      <TextObject Name="FechaLbl"
+                  Left="490" Top="14" Width="190" Height="20"
+                  Text="Fecha de emisión"
+                  Font="Arial, 7pt" TextColor="180,160,140"
+                  HorzAlign="Right" VertAlign="Center"/>
+
+      <TextObject Name="FechaVal"
+                  Left="490" Top="34" Width="190" Height="26"
+                  Text="[FechaEmision]"
+                  Font="Arial, 11pt, Bold" TextColor="198,143,82"
+                  HorzAlign="Right" VertAlign="Center"/>
+
+      <!-- Línea separadora dorada -->
+      <TextObject Name="separador"
+                  Left="0" Top="76" Width="680" Height="4"
+                  Text="" FillColor="198,143,82"
+                  Border.Lines="None"/>
+
+      <!-- ── CABECERA DE COLUMNAS ── -->
+      <!-- Col widths (FR units): #=38 Nom=170 Cat=94 Desc=159 Precio=83 Stock=49 Valor=87 -->
+      <!-- Cumulative Left:        0   38      208    302      461      544    593         -->
+      <TextObject Name="hNum"
+                  Left="0" Top="80" Width="38" Height="40"
+                  Text="#" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Center" VertAlign="Center"
+                  Border.Lines="All" Border.Color="80,60,40"/>
+
+      <TextObject Name="hNom"
+                  Left="38" Top="80" Width="170" Height="40"
+                  Text="Producto" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Left" VertAlign="Center"
+                  Padding="5,0,0,0" Border.Lines="All" Border.Color="80,60,40"/>
+
+      <TextObject Name="hCat"
+                  Left="208" Top="80" Width="94" Height="40"
+                  Text="Categoría" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Left" VertAlign="Center"
+                  Padding="5,0,0,0" Border.Lines="All" Border.Color="80,60,40"/>
+
+      <TextObject Name="hDesc"
+                  Left="302" Top="80" Width="159" Height="40"
+                  Text="Descripción" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Left" VertAlign="Center"
+                  Padding="5,0,0,0" Border.Lines="All" Border.Color="80,60,40"/>
+
+      <TextObject Name="hPrec"
+                  Left="461" Top="80" Width="83" Height="40"
+                  Text="Precio" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Right" VertAlign="Center"
+                  Padding="0,0,5,0" Border.Lines="All" Border.Color="80,60,40"/>
+
+      <TextObject Name="hStock"
+                  Left="544" Top="80" Width="49" Height="40"
+                  Text="Stock" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Center" VertAlign="Center"
+                  Border.Lines="All" Border.Color="80,60,40"/>
+
+      <TextObject Name="hVal"
+                  Left="593" Top="80" Width="87" Height="40"
+                  Text="Valor Stock" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Right" VertAlign="Center"
+                  Padding="0,0,5,0" Border.Lines="All" Border.Color="80,60,40"/>
+    </PageHeaderBand>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         DETALLE: una fila por producto (10mm = 38u)
+         Filas pares con fondo dorado muy suave
+         ═══════════════════════════════════════════════════════════════ -->
+    <DataBand Name="Data1" DataSource="Productos" Top="120" Left="0" Width="680" Height="38"
+              EvenRows="true" EvenColor="252,247,240">
+
+      <TextObject Name="dNum"
+                  Left="0" Top="0" Width="38" Height="38"
+                  Text="[Productos.Numero]" Font="Arial, 8pt" TextColor="120,90,60"
+                  HorzAlign="Center" VertAlign="Center"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+
+      <TextObject Name="dNom"
+                  Left="38" Top="0" Width="170" Height="38"
+                  Text="[Productos.Nombre]" Font="Arial, 9pt, Bold" TextColor="21,16,12"
+                  HorzAlign="Left" VertAlign="Center" Padding="5,0,0,0"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+
+      <TextObject Name="dCat"
+                  Left="208" Top="0" Width="94" Height="38"
+                  Text="[Productos.Categoria]" Font="Arial, 8pt" TextColor="100,75,50"
+                  HorzAlign="Left" VertAlign="Center" Padding="5,0,0,0"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+
+      <TextObject Name="dDesc"
+                  Left="302" Top="0" Width="159" Height="38"
+                  Text="[Productos.Descripcion]" Font="Arial, 7pt" TextColor="80,65,50"
+                  HorzAlign="Left" VertAlign="Center" Padding="5,2,0,2"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+
+      <TextObject Name="dPrec"
+                  Left="461" Top="0" Width="83" Height="38"
+                  Text="[Productos.Precio]" Font="Arial, 8pt, Bold" TextColor="21,16,12"
+                  HorzAlign="Right" VertAlign="Center" Padding="0,0,5,0"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+
+      <TextObject Name="dStock"
+                  Left="544" Top="0" Width="49" Height="38"
+                  Text="[Productos.Stock]" Font="Arial, 8pt" TextColor="21,16,12"
+                  HorzAlign="Center" VertAlign="Center"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+
+      <TextObject Name="dVal"
+                  Left="593" Top="0" Width="87" Height="38"
+                  Text="[Productos.ValorStock]" Font="Arial, 8pt, Bold" TextColor="21,16,12"
+                  HorzAlign="Right" VertAlign="Center" Padding="0,0,5,0"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+    </DataBand>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         RESUMEN: totales calculados
+         ═══════════════════════════════════════════════════════════════ -->
+    <ReportSummaryBand Name="ReportSummary1" Top="158" Left="0" Width="680" Height="140">
+
+      <!-- Franja dorada separadora -->
+      <TextObject Name="sepSummary"
+                  Left="0" Top="8" Width="680" Height="4"
+                  Text="" FillColor="198,143,82" Border.Lines="None"/>
+
+      <!-- Título sección resumen -->
+      <TextObject Name="lbResumen"
+                  Left="0" Top="20" Width="680" Height="34"
+                  Text="RESUMEN DEL CATÁLOGO"
+                  Font="Arial, 10pt, Bold" TextColor="21,16,12"
+                  FillColor="245,238,225"
+                  HorzAlign="Left" VertAlign="Center" Padding="12,0,0,0"
+                  Border.Lines="All" Border.Color="198,143,82"/>
+
+      <!-- Total de productos -->
+      <TextObject Name="lbTotalLbl"
+                  Left="0" Top="62" Width="230" Height="30"
+                  Text="Total de bebidas en catálogo:"
+                  Font="Arial, 9pt" TextColor="80,60,40"
+                  HorzAlign="Left" VertAlign="Center" Padding="4,0,0,0"/>
+
+      <TextObject Name="vTotal"
+                  Left="230" Top="62" Width="80" Height="30"
+                  Text="[TotalProductos]"
+                  Font="Arial, 11pt, Bold" TextColor="21,16,12"
+                  HorzAlign="Left" VertAlign="Center"/>
+
+      <!-- Precio promedio -->
+      <TextObject Name="lbPromLbl"
+                  Left="0" Top="96" Width="230" Height="30"
+                  Text="Precio promedio:"
+                  Font="Arial, 9pt" TextColor="80,60,40"
+                  HorzAlign="Left" VertAlign="Center" Padding="4,0,0,0"/>
+
+      <TextObject Name="vProm"
+                  Left="230" Top="96" Width="180" Height="30"
+                  Text="[PrecioPromedio]"
+                  Font="Arial, 11pt, Bold" TextColor="21,16,12"
+                  HorzAlign="Left" VertAlign="Center"/>
+
+      <!-- Valor total del inventario (destacado a la derecha) -->
+      <TextObject Name="bgValorTotal"
+                  Left="400" Top="54" Width="280" Height="80"
+                  Text="" FillColor="21,16,12" Border.Lines="None"/>
+
+      <TextObject Name="lbInvLbl"
+                  Left="400" Top="54" Width="280" Height="34"
+                  Text="VALOR TOTAL DEL INVENTARIO"
+                  Font="Arial, 7pt, Bold" TextColor="198,143,82"
+                  HorzAlign="Center" VertAlign="Center"/>
+
+      <TextObject Name="vInv"
+                  Left="400" Top="88" Width="280" Height="46"
+                  Text="[ValorInventario]"
+                  Font="Arial, 15pt, Bold" TextColor="255,255,255"
+                  HorzAlign="Center" VertAlign="Center"/>
+    </ReportSummaryBand>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         PIE DE PÁGINA: numeración de páginas
+         ═══════════════════════════════════════════════════════════════ -->
+    <PageFooterBand Name="PageFooter1" Top="300" Left="0" Width="680" Height="26">
+
+      <!-- Línea dorada separadora del pie -->
+      <TextObject Name="footerLine"
+                  Left="0" Top="0" Width="680" Height="3"
+                  Text="" FillColor="198,143,82" Border.Lines="None"/>
+
+      <TextObject Name="Copyright"
+                  Left="0" Top="6" Width="430" Height="20"
+                  Text="© 2026 Casa Andina — Licorería · Cochabamba, Bolivia"
+                  Font="Arial, 7pt" TextColor="140,120,100"
+                  HorzAlign="Left" VertAlign="Center"/>
+
+      <TextObject Name="Paginas"
+                  Left="490" Top="6" Width="190" Height="20"
+                  Text="Página [Page] de [TotalPages]"
+                  Font="Arial, 7pt, Bold" TextColor="80,60,40"
+                  HorzAlign="Right" VertAlign="Center"/>
+    </PageFooterBand>
+
+  </ReportPage>
+</Report>

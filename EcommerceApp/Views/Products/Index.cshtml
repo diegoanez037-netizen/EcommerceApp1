@@ -3,35 +3,17 @@
 @{
     ViewData["Title"] = "Catálogo";
 }
-<section class="hero">
-    <div class="row align-items-center">
-        <div class="col-lg-8">
-            <h1 class="hero-title">
-                El buen trago<br><em>tiene nombre.</em>
-            </h1>
-            <p class="hero-sub">
-                Una selección curada de licores, vinos y cervezas de todo Bolivia,
-                elegidos por su carácter, no por su etiqueta.
-            </p>
-            <div class="hero-stats">
-                <div>
-                    <span class="hero-stat-number">@Model.Count</span>
-                    <span class="hero-stat-label">Bebidas disponibles</span>
-                </div>
-                <div>
-                    <span class="hero-stat-number">@ViewBag.TotalCategories</span>
-                    <span class="hero-stat-label">Categorías</span>
-                </div>
-                <div>
-                    <span class="hero-stat-number">100%</span>
-                    <span class="hero-stat-label">Origen boliviano</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<h2 class="section-title">La selección</h2>
+<div class="catalog-header">
+    <div>
+        <h1>El buen trago tiene nombre.</h1>
+        <p class="catalog-sub">Selección curada de licores, vinos y cervezas de todo Bolivia.</p>
+    </div>
+    <div class="catalog-mini-stats">
+        <div><span class="num">@Model.Count</span><span class="lbl">BEBIDAS</span></div>
+        <div><span class="num">@ViewBag.TotalCategories</span><span class="lbl">CATEGORÍAS</span></div>
+    </div>
+</div>
 
 @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
 {
@@ -124,14 +106,25 @@ else
                                 Ver detalles
                             </a>
 
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <form asp-controller="Cart" asp-action="Add" method="post" class="add-to-cart-form">
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn-add-cart">Agregar</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <a asp-controller="Account" asp-action="Login" class="btn-add-cart btn-add-cart-guest">
+                                    Inicia sesión para comprar
+                                </a>
+                            }
+
                             @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
                             {
-                                <a href="@Url.Action("Edit", new { id = product.Id })" class="btn-editar">
-                                    Editar
-                                </a>
-                                <a href="@Url.Action("Delete", new { id = product.Id })" class="btn-eliminar">
-                                    Eliminar
-                                </a>
+                                <a href="@Url.Action("Edit", new { id = product.Id })" class="btn-editar">Editar</a>
+                                <a href="@Url.Action("Delete", new { id = product.Id })" class="btn-eliminar">Eliminar</a>
                             }
                         </div>
                     </div>

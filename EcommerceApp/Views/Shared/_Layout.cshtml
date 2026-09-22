@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Identity
+@using EcommerceApp.Data
+@using EcommerceApp.Models
+@inject ApplicationDbContext DbContext
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -33,12 +38,33 @@
                             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Catálogo</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Report" asp-action="Catalogo">📄 Reporte</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
+                        @{
+                            var cartCount = 0;
+                            if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                var uid = UserManager.GetUserId(User);
+                                cartCount = DbContext.CartItems.Count(c => c.UserId == uid);
+                            }
+                        }
+
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link cart-icon-link" asp-controller="Cart" asp-action="Index">
+                                    🛒 Carrito
+                                    @if (cartCount > 0)
+                                    {
+                                        <span class="cart-badge">@cartCount</span>
+                                    }
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <span class="nav-link user-greeting">@User.Identity.Name</span>
                             </li>

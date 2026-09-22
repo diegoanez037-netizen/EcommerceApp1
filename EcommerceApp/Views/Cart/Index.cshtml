@@ -1,0 +1,62 @@
+﻿@model List<EcommerceApp.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Mi carrito";
+    var total = Model.Sum(i => i.Product!.Price * i.Quantity);
+}
+
+<h2 class="section-title">Tu carrito</h2>
+
+@if (TempData["CheckoutSuccess"] as string == "true")
+{
+    <div class="checkout-success">
+        <strong>¡Pedido confirmado!</strong> Gracias por tu compra en Casa Andina.
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <h3>Tu carrito está vacío</h3>
+        <p>Explora el <a asp-controller="Products" asp-action="Index">catálogo</a> y agrega tus bebidas favoritas.</p>
+    </div>
+}
+else
+{
+    <div class="cart-list">
+        @foreach (var item in Model)
+        {
+            <div class="cart-row">
+                <img src="@(item.Product!.ImageUrl ?? "/images/default-product.jpg")" class="cart-row-img" alt="@item.Product.Name" />
+
+                <div class="cart-row-info">
+                    <div class="cart-row-name">@item.Product.Name</div>
+                    <div class="cart-row-price">@item.Product.Price.ToString("0.00") Bs c/u</div>
+                </div>
+
+                <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="cart-qty-form">
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <button type="submit" name="quantity" value="@(item.Quantity - 1)" class="qty-btn">−</button>
+                    <span class="qty-value">@item.Quantity</span>
+                    <button type="submit" name="quantity" value="@(item.Quantity + 1)" class="qty-btn">+</button>
+                </form>
+
+                <div class="cart-row-subtotal">@((item.Product.Price * item.Quantity).ToString("0.00")) Bs</div>
+
+                <form asp-controller="Cart" asp-action="Remove" method="post">
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <button type="submit" class="cart-remove-btn" title="Quitar">✕</button>
+                </form>
+            </div>
+        }
+    </div>
+
+    <div class="cart-summary">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-value">@total.ToString("0.00") Bs</span>
+    </div>
+
+    <form asp-controller="Cart" asp-action="Checkout" method="post">
+        <button type="submit" class="btn-checkout">Finalizar pedido</button>
+    </form>
+}
