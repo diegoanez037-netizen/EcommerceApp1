@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/21/2026" ReportInfo.Modified="09/21/2026" ReportInfo.CreatorVersion="2026.2.8">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="09/21/2026" ReportInfo.Modified="09/22/2026" ReportInfo.CreatorVersion="2026.2.8">
   <Dictionary>
     <TableDataSource Name="Productos" ReferenceName="Productos" DataType="System.Int32" Enabled="true">
       <Column Name="Numero"      DataType="System.Int32"/>
       <Column Name="Nombre"      DataType="System.String"/>
       <Column Name="Categoria"   DataType="System.String"/>
       <Column Name="Descripcion" DataType="System.String"/>
+      <Column Name="Fecha"       DataType="System.String"/>
       <Column Name="Precio"      DataType="System.String"/>
       <Column Name="Stock"       DataType="System.Int32"/>
       <Column Name="ValorStock"  DataType="System.String"/>
@@ -78,46 +79,52 @@
                   Border.Lines="None"/>
 
       <!-- ── CABECERA DE COLUMNAS ── -->
-      <!-- Col widths (FR units): #=38 Nom=170 Cat=94 Desc=159 Precio=83 Stock=49 Valor=87 -->
-      <!-- Cumulative Left:        0   38      208    302      461      544    593         -->
+      <!-- Col widths (FR units): #=30 Nom=140 Cat=85 Desc=135 Fecha=65 Precio=75 Stock=45 Valor=105 -->
+      <!-- Cumulative Left:        0   30      170    255      390      455    530      575      -->
       <TextObject Name="hNum"
-                  Left="0" Top="80" Width="38" Height="40"
+                  Left="0" Top="80" Width="30" Height="40"
                   Text="#" Font="Arial, 8pt, Bold" TextColor="255,255,255"
                   FillColor="50,35,25" HorzAlign="Center" VertAlign="Center"
                   Border.Lines="All" Border.Color="80,60,40"/>
 
       <TextObject Name="hNom"
-                  Left="38" Top="80" Width="170" Height="40"
+                  Left="30" Top="80" Width="140" Height="40"
                   Text="Producto" Font="Arial, 8pt, Bold" TextColor="255,255,255"
                   FillColor="50,35,25" HorzAlign="Left" VertAlign="Center"
                   Padding="5,0,0,0" Border.Lines="All" Border.Color="80,60,40"/>
 
       <TextObject Name="hCat"
-                  Left="208" Top="80" Width="94" Height="40"
+                  Left="170" Top="80" Width="85" Height="40"
                   Text="Categoría" Font="Arial, 8pt, Bold" TextColor="255,255,255"
                   FillColor="50,35,25" HorzAlign="Left" VertAlign="Center"
                   Padding="5,0,0,0" Border.Lines="All" Border.Color="80,60,40"/>
 
       <TextObject Name="hDesc"
-                  Left="302" Top="80" Width="159" Height="40"
+                  Left="255" Top="80" Width="135" Height="40"
                   Text="Descripción" Font="Arial, 8pt, Bold" TextColor="255,255,255"
                   FillColor="50,35,25" HorzAlign="Left" VertAlign="Center"
                   Padding="5,0,0,0" Border.Lines="All" Border.Color="80,60,40"/>
 
+      <TextObject Name="hFecha"
+                  Left="390" Top="80" Width="65" Height="40"
+                  Text="Fecha" Font="Arial, 8pt, Bold" TextColor="255,255,255"
+                  FillColor="50,35,25" HorzAlign="Center" VertAlign="Center"
+                  Border.Lines="All" Border.Color="80,60,40"/>
+
       <TextObject Name="hPrec"
-                  Left="461" Top="80" Width="83" Height="40"
+                  Left="455" Top="80" Width="75" Height="40"
                   Text="Precio" Font="Arial, 8pt, Bold" TextColor="255,255,255"
                   FillColor="50,35,25" HorzAlign="Right" VertAlign="Center"
                   Padding="0,0,5,0" Border.Lines="All" Border.Color="80,60,40"/>
 
       <TextObject Name="hStock"
-                  Left="544" Top="80" Width="49" Height="40"
+                  Left="530" Top="80" Width="45" Height="40"
                   Text="Stock" Font="Arial, 8pt, Bold" TextColor="255,255,255"
                   FillColor="50,35,25" HorzAlign="Center" VertAlign="Center"
                   Border.Lines="All" Border.Color="80,60,40"/>
 
       <TextObject Name="hVal"
-                  Left="593" Top="80" Width="87" Height="40"
+                  Left="575" Top="80" Width="105" Height="40"
                   Text="Valor Stock" Font="Arial, 8pt, Bold" TextColor="255,255,255"
                   FillColor="50,35,25" HorzAlign="Right" VertAlign="Center"
                   Padding="0,0,5,0" Border.Lines="All" Border.Color="80,60,40"/>
@@ -131,43 +138,49 @@
               EvenRows="true" EvenColor="252,247,240">
 
       <TextObject Name="dNum"
-                  Left="0" Top="0" Width="38" Height="38"
+                  Left="0" Top="0" Width="30" Height="38"
                   Text="[Productos.Numero]" Font="Arial, 8pt" TextColor="120,90,60"
                   HorzAlign="Center" VertAlign="Center"
                   Border.Lines="Bottom" Border.Color="220,205,185"/>
 
       <TextObject Name="dNom"
-                  Left="38" Top="0" Width="170" Height="38"
+                  Left="30" Top="0" Width="140" Height="38"
                   Text="[Productos.Nombre]" Font="Arial, 9pt, Bold" TextColor="21,16,12"
                   HorzAlign="Left" VertAlign="Center" Padding="5,0,0,0"
                   Border.Lines="Bottom" Border.Color="220,205,185"/>
 
       <TextObject Name="dCat"
-                  Left="208" Top="0" Width="94" Height="38"
+                  Left="170" Top="0" Width="85" Height="38"
                   Text="[Productos.Categoria]" Font="Arial, 8pt" TextColor="100,75,50"
                   HorzAlign="Left" VertAlign="Center" Padding="5,0,0,0"
                   Border.Lines="Bottom" Border.Color="220,205,185"/>
 
       <TextObject Name="dDesc"
-                  Left="302" Top="0" Width="159" Height="38"
+                  Left="255" Top="0" Width="135" Height="38"
                   Text="[Productos.Descripcion]" Font="Arial, 7pt" TextColor="80,65,50"
                   HorzAlign="Left" VertAlign="Center" Padding="5,2,0,2"
                   Border.Lines="Bottom" Border.Color="220,205,185"/>
 
+      <TextObject Name="dFecha"
+                  Left="390" Top="0" Width="65" Height="38"
+                  Text="[Productos.Fecha]" Font="Arial, 8pt" TextColor="80,65,50"
+                  HorzAlign="Center" VertAlign="Center"
+                  Border.Lines="Bottom" Border.Color="220,205,185"/>
+
       <TextObject Name="dPrec"
-                  Left="461" Top="0" Width="83" Height="38"
+                  Left="455" Top="0" Width="75" Height="38"
                   Text="[Productos.Precio]" Font="Arial, 8pt, Bold" TextColor="21,16,12"
                   HorzAlign="Right" VertAlign="Center" Padding="0,0,5,0"
                   Border.Lines="Bottom" Border.Color="220,205,185"/>
 
       <TextObject Name="dStock"
-                  Left="544" Top="0" Width="49" Height="38"
+                  Left="530" Top="0" Width="45" Height="38"
                   Text="[Productos.Stock]" Font="Arial, 8pt" TextColor="21,16,12"
                   HorzAlign="Center" VertAlign="Center"
                   Border.Lines="Bottom" Border.Color="220,205,185"/>
 
       <TextObject Name="dVal"
-                  Left="593" Top="0" Width="87" Height="38"
+                  Left="575" Top="0" Width="105" Height="38"
                   Text="[Productos.ValorStock]" Font="Arial, 8pt, Bold" TextColor="21,16,12"
                   HorzAlign="Right" VertAlign="Center" Padding="0,0,5,0"
                   Border.Lines="Bottom" Border.Color="220,205,185"/>

@@ -17,6 +17,9 @@ namespace EcommerceApp.Controllers
             _env = env;
         }
 
+        // GET: /Report
+        public IActionResult Index() => RedirectToAction(nameof(Catalogo));
+
         // GET: /Report/Catalogo
         public async Task<IActionResult> Catalogo()
         {
@@ -32,6 +35,7 @@ namespace EcommerceApp.Controllers
             tabla.Columns.Add("Nombre",      typeof(string));
             tabla.Columns.Add("Categoria",   typeof(string));
             tabla.Columns.Add("Descripcion", typeof(string));
+            tabla.Columns.Add("Fecha",       typeof(string));   // Fecha de registro (dd/MM/yyyy)
             tabla.Columns.Add("Precio",      typeof(string));   // pre-formateado con "Bs."
             tabla.Columns.Add("Stock",       typeof(int));
             tabla.Columns.Add("ValorStock",  typeof(string));   // pre-formateado con "Bs."
@@ -44,6 +48,7 @@ namespace EcommerceApp.Controllers
                     p.Name,
                     p.Category ?? "Sin categoría",
                     p.Description,
+                    p.CreatedAt.ToString("dd/MM/yyyy"),
                     $"Bs. {p.Price:N2}",
                     p.Stock,
                     $"Bs. {p.Price * p.Stock:N2}"

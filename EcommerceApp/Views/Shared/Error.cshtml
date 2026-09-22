@@ -1,10 +1,10 @@
-﻿@model ErrorViewModel
+@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
 }
 
 <h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h2 class="text-danger">Ha ocurrido un error al procesar tu solicitud.</h2>
 
 @if (Model.ShowRequestId)
 {
@@ -13,13 +13,20 @@
     </p>
 }
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+@{
+    var exceptionFeature = Context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
+}
+
+@if (exceptionFeature?.Error != null)
+{
+    <div style="background-color: #2b1515; border: 1px solid #e74c3c; color: #fcc; padding: 1.2rem; border-radius: 6px; margin: 1.5rem 0;">
+        <h3 style="color: #ff7675; margin-top: 0;">Detalle del error</h3>
+        <p><strong>Ruta que falló:</strong> <code>@exceptionFeature.Path</code></p>
+        <p><strong>Tipo de error:</strong> <code>@exceptionFeature.Error.GetType().FullName</code></p>
+        <p><strong>Mensaje:</strong> @exceptionFeature.Error.Message</p>
+        <details style="margin-top: 1rem;">
+            <summary style="cursor: pointer; color: #fab1a0;">Ver traza completa (Stack Trace)</summary>
+            <pre style="background-color: #1a0a0a; color: #fab1a0; padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; font-size: 0.8rem; white-space: pre-wrap;">@exceptionFeature.Error.ToString()</pre>
+        </details>
+    </div>
+}
