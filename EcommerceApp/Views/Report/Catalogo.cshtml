@@ -1,0 +1,33 @@
+﻿<h2>Reporte de catálogo</h2>
+
+<button type="button"
+        id="showReportDate"
+        class="btn btn-primary">
+    Generar reporte
+</button>
+
+<div id="reportDatePanel" class="d-none">
+    <form asp-controller="Report"
+          asp-action="Catalogo"
+          method="post">
+
+        <label for="reportDate">Fecha y hora</label>
+
+        <input type="datetime-local"
+               id="reportDate"
+               name="Fecha"
+               step="1"
+               class="form-control"
+               required />
+
+        <button type="submit" class="btn btn-success">
+            Descargar PDF
+        </button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("showReportDate").addEventListener("click", function () {
+        document.getElementById("reportDatePanel").classList.remove("d-none");
+    });
+</script>

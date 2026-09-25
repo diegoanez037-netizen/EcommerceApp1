@@ -9,9 +9,40 @@ namespace EcommerceApp.Data
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(o => o.Total)
+                    .HasPrecision(18, 2);
+
+                entity.HasOne(o => o.User)
+                    .WithMany()
+                    .HasForeignKey(o => o.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(o => o.Details)
+                    .WithOne(d => d.Order)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<OrderDetail>(entity =>
+            {
+                entity.Property(d => d.UnitPrice)
+                    .HasPrecision(18, 2);
+
+                entity.Property(d => d.Subtotal)
+                    .HasPrecision(18, 2);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Product>()

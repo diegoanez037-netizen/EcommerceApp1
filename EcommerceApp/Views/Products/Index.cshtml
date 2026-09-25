@@ -27,7 +27,22 @@
            name="search"
            value="@ViewBag.CurrentSearch"
            class="form-control search-input"
-           placeholder="Buscar por nombre o descripción..." />
+           placeholder="Buscar por nombre o descripción..."
+           id="catalogSearchInput" />
+
+    <button type="button"
+            id="voiceSearchButton"
+            class="voice-search-button"
+            title="Buscar por voz"
+            aria-label="Buscar por voz">
+        <span aria-hidden="true">🎙</span>
+        Voz
+    </button>
+
+    <span id="voiceSearchStatus"
+          class="voice-search-status"
+          role="status"
+          aria-live="polite"></span>
 
     <button type="submit" class="btn-search">Buscar</button>
 
@@ -132,4 +147,88 @@ else
             </div>
         }
     </div>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const button = document.getElementById("voiceSearchButton");
+            const input = document.getElementById("catalogSearchInput");
+            const status = document.getElementById("voiceSearchStatus");
+
+            if (!button || !input) {
+                return;
+            }
+
+            const SpeechRecognition =
+                window.SpeechRecognition ||
+                window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                button.disabled = true;
+                status.textContent = "Búsqueda por voz no disponible";
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = "es-BO";
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            function setListening(listening) {
+                button.classList.toggle("is-listening", listening);
+                button.setAttribute("aria-pressed", listening);
+
+                status.textContent = listening
+                    ? "Escuchando..."
+                    : "";
+
+                if (listening) {
+                    button.querySelector("span").textContent = "■";
+                } else {
+                    button.querySelector("span").textContent = "🎙";
+                }
+            }
+
+            button.addEventListener("click", function () {
+                if (recognition) {
+                    try {
+                        recognition.start();
+                    } catch {
+                        // El navegador ya está escuchando.
+                    }
+                }
+            });
+
+            recognition.addEventListener("start", function () {
+                setListening(true);
+            });
+
+            recognition.addEventListener("result", function (event) {
+                const transcript = event.results[0][0].transcript
+                    .replace(/[.,!?;:¿¡]/g, " ")
+                    .replace(/\s+/g, " ")
+                    .trim();
+
+                if (transcript) {
+                    input.value = transcript;
+                    input.form.requestSubmit();
+                }
+            });
+
+            recognition.addEventListener("error", function (event) {
+                if (event.error === "not-allowed") {
+                    status.textContent =
+                        "Permite el acceso al micrófono para buscar por voz.";
+                } else if (event.error !== "aborted") {
+                    status.textContent =
+                        "No se pudo reconocer la voz. Intenta de nuevo.";
+                }
+            });
+
+            recognition.addEventListener("end", function () {
+                setListening(false);
+            });
+        })();
+    </script>
 }

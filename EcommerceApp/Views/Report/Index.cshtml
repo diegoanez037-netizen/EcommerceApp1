@@ -1,0 +1,421 @@
+﻿@{
+    ViewData["Title"] = "Reporte";
+}
+
+<style>
+    .report-builder {
+        min-height: 70vh;
+        padding: 3rem 0;
+        color: #fff8e9;
+    }
+
+    .report-builder__layout {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 2.5rem;
+        align-items: center;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .report-builder__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        color: #dda45b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+    }
+
+    .report-builder__eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #dda45b;
+        box-shadow: 0 0 0 5px rgba(221, 164, 91, 0.12);
+    }
+
+    .report-builder__title {
+        max-width: 520px;
+        margin: 0;
+        color: #fff8e9;
+        font-family: Fraunces, Georgia, serif;
+        font-size: clamp(2.3rem, 5vw, 4rem);
+        font-weight: 600;
+        line-height: 1.05;
+    }
+
+    .report-builder__description {
+        max-width: 490px;
+        margin: 1.5rem 0 0;
+        color: #c7b49a;
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+    .report-builder__details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+
+    .report-builder__detail {
+        padding: 0.8rem 1rem;
+        border: 1px solid #493323;
+        border-radius: 12px;
+        background: rgba(33, 23, 18, 0.72);
+    }
+
+    .report-builder__detail small {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: #a99276;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .report-builder__detail strong {
+        color: #f4d19d;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .report-builder__panel {
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+        border: 1px solid #5a4029;
+        border-radius: 24px;
+        background:
+            linear-gradient(145deg, rgba(42, 29, 21, 0.98), rgba(23, 16, 12, 0.98));
+        box-shadow:
+            0 24px 70px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 232, 194, 0.06);
+    }
+
+    .report-builder__panel-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .report-builder__panel-label {
+        display: block;
+        margin-bottom: 0.45rem;
+        color: #dda45b;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .report-builder__panel-title {
+        margin: 0;
+        color: #fff8e9;
+        font-family: Fraunces, Georgia, serif;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    .report-builder__status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.45rem 0.7rem;
+        border: 1px solid rgba(108, 181, 121, 0.35);
+        border-radius: 999px;
+        color: #9bd3a6;
+        background: rgba(63, 117, 72, 0.14);
+        font-size: 0.72rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .report-builder__status::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #7fce8b;
+    }
+
+    .report-builder__description-small {
+        margin: 0 0 1.5rem;
+        color: #bca58b;
+        font-size: 0.92rem;
+        line-height: 1.6;
+    }
+
+    .report-builder__button {
+        width: 100%;
+        min-height: 52px;
+        border: 0;
+        border-radius: 13px;
+        padding: 0.85rem 1.25rem;
+        color: #1c120c;
+        background: linear-gradient(135deg, #e5ad67, #c8833c);
+        box-shadow: 0 10px 24px rgba(201, 132, 61, 0.22);
+        font-size: 0.95rem;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .report-builder__button:hover {
+        color: #1c120c;
+        filter: brightness(1.06);
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(201, 132, 61, 0.32);
+    }
+
+    .report-builder__button:focus-visible {
+        outline: 3px solid rgba(229, 173, 103, 0.35);
+        outline-offset: 3px;
+    }
+
+    .report-builder__button--download {
+        margin-top: 1.25rem;
+        background: linear-gradient(135deg, #f0c98f, #d99a4b);
+    }
+
+    .report-builder__form {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #493323;
+    }
+
+    .report-builder__field {
+        margin-bottom: 1.1rem;
+    }
+
+    .report-builder__label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #f4d19d;
+        font-size: 0.82rem;
+        font-weight: 600;
+    }
+
+    .report-builder__control {
+        width: 100%;
+        min-height: 52px;
+        border: 1px solid #5a4029;
+        border-radius: 12px;
+        padding: 0.8rem 0.95rem;
+        color: #fff8e9;
+        background: #15100d;
+        color-scheme: dark;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .report-builder__control:focus {
+        border-color: #dda45b;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(221, 164, 91, 0.14);
+    }
+
+    .report-builder__hint {
+        display: block;
+        margin-top: 0.45rem;
+        color: #a99276;
+        font-size: 0.75rem;
+    }
+
+    .report-builder__info {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+        padding: 0.9rem 1rem;
+        border: 1px solid rgba(221, 164, 91, 0.22);
+        border-radius: 12px;
+        color: #c7b49a;
+        background: rgba(221, 164, 91, 0.06);
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    .report-builder__info strong {
+        color: #e8bd80;
+    }
+
+    .report-builder__validation {
+        margin-bottom: 1rem;
+        color: #ff9c9c;
+        font-size: 0.82rem;
+    }
+
+       @@media (max-width: 767px) {
+        .report-builder {
+            padding: 2rem 0;
+        }
+
+        .report-builder__layout {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .report-builder__title {
+            font-size: 2.4rem;
+        }
+
+        .report-builder__panel-header {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="report-builder">
+    <div class="report-builder__layout">
+
+        <section class="report-builder__intro">
+            <div class="report-builder__eyebrow">
+                Reporte operativo
+            </div>
+
+            <h2 class="report-builder__title">
+                Catálogo de productos
+            </h2>
+
+            <p class="report-builder__description">
+                Genera un reportePdf actualizado con la información de
+                tu inventario y la fecha de emisión que_elijas.
+            </p>
+
+            <div class="report-builder__details">
+                <div class="report-builder__detail">
+                    <small>Formato</small>
+                    <strong>PDF profesional</strong>
+                </div>
+
+                <div class="report-builder__detail">
+                    <small>Fuente</small>
+                    <strong>Inventario Casa Andina</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="report-builder__panel">
+            <div class="report-builder__panel-header">
+                <div>
+                    <span class="report-builder__panel-label">
+                        Configuración
+                    </span>
+
+                    <h3 class="report-builder__panel-title">
+                        Datos de emisión
+                    </h3>
+                </div>
+
+                <span class="report-builder__status">
+                    Seguro
+                </span>
+            </div>
+
+            <p class="report-builder__description-small">
+                El reporte incluirá todos los productos registrados
+                en el catálogo.
+            </p>
+
+            <button type="button"
+                    id="mostrarFiltros"
+                    class="report-builder__button"
+                    aria-controls="panelFiltros"
+                    aria-expanded="false">
+                Configurar y generar
+            </button>
+
+            <div id="panelFiltros"
+                 class="d-none report-builder__form">
+
+                <form asp-controller="Report"
+                      asp-action="Catalogo"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="report-builder__field">
+                        <label class="report-builder__label"
+                               for="reportDate">
+                            Fecha y hora del reporte
+                        </label>
+
+                        <input type="datetime-local"
+                               id="reportDate"
+                               name="fechaReporte"
+                               step="1"
+                               class="report-builder__control"
+                               required />
+
+                        <span class="report-builder__hint">
+                            Aparecerá en el encabezado del PDF.
+                        </span>
+                    </div>
+
+                    <div class="report-builder__info">
+                        <span aria-hidden="true">ⓘ</span>
+
+                        <span>
+                            Puedes imprimir el resultado o guardarlo
+                            como PDF desde tu navegador.
+                        </span>
+                    </div>
+
+                    <div asp-validation-summary="All"
+                         class="report-builder__validation"></div>
+
+                    <button type="submit"
+                            class="report-builder__button report-builder__button--download">
+                        Descargar PDF
+                    </button>
+
+                </form>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const boton = document.getElementById("mostrarFiltros");
+        const panel = document.getElementById("panelFiltros");
+        const fecha = document.getElementById("reportDate");
+
+        function asignarFechaActual() {
+            if (fecha && !fecha.value) {
+                const ahora = new Date();
+
+                const fechaLocal = new Date(
+                    ahora.getTime() - ahora.getTimezoneOffset() * 60000
+                ).toISOString().slice(0, 19);
+
+                fecha.value = fechaLocal;
+            }
+        }
+
+        if (boton && panel && fecha) {
+            boton.addEventListener("click", function () {
+                const estabaOculto = panel.classList.contains("d-none");
+
+                panel.classList.toggle("d-none", !estabaOculto);
+                boton.setAttribute("aria-expanded", estabaOculto);
+
+                boton.textContent = estabaOculto
+                    ? "Ocultar configuración"
+                    : "Configurar y generar";
+
+                if (estabaOculto) {
+                    asignarFechaActual();
+                }
+            });
+
+            asignarFechaActual();
+        }
+    </script>
+}

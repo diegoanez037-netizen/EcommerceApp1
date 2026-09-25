@@ -1,0 +1,160 @@
+﻿@model List<EcommerceApp.Models.Order>
+@using EcommerceApp.Models
+
+@{
+    ViewData["Title"] = "Mis pedidos";
+}
+
+<style>
+    .orders-page {
+        color: #fff8e9;
+    }
+
+    .orders-page__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .orders-page__title {
+        margin: 0;
+        color: #fff8e9;
+        font-family: Fraunces, Georgia, serif;
+        font-size: 2.4rem;
+    }
+
+    .orders-page__subtitle {
+        margin: 0.4rem 0 0;
+        color: #bda78d;
+    }
+
+    .orders-page__list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .order-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        padding: 1.25rem 1.5rem;
+        border: 1px solid #513725;
+        border-radius: 16px;
+        background: #211713;
+    }
+
+    .order-card__number {
+        color: #e4b777;
+        font-weight: 700;
+    }
+
+    .order-card__date {
+        margin-top: 0.3rem;
+        color: #a99276;
+        font-size: 0.85rem;
+    }
+
+    .order-card__total {
+        color: #fff8e9;
+        font-size: 1.2rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .order-card__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0.65rem 1rem;
+        border-radius: 10px;
+        color: #1c120c;
+        background: #dda45b;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .order-card__button:hover {
+        color: #1c120c;
+        background: #edbd78;
+    }
+
+    .orders-page__empty {
+        padding: 2.5rem;
+        border: 1px dashed #6a4930;
+        border-radius: 16px;
+        text-align: center;
+        color: #c7b49a;
+    }
+
+    .orders-page__empty strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #fff8e9;
+        font-size: 1.2rem;
+    }
+</style>
+
+<div class="container orders-page py-5">
+
+    <div class="orders-page__header">
+        <div>
+            <h2 class="orders-page__title">Mis pedidos</h2>
+            <p class="orders-page__subtitle">
+                Consulta tus compras y su estado actual.
+            </p>
+        </div>
+
+        <a asp-controller="Products"
+           asp-action="Index"
+           class="order-card__button">
+            Seguir comprando
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="orders-page__empty">
+            <strong>Todavía no tienes pedidos</strong>
+            Cuando finalices una compra aparecerá aquí.
+        </div>
+    }
+    else
+    {
+        <div class="orders-page__list">
+            @foreach (var order in Model)
+            {
+                <article class="order-card">
+                    <div>
+                        <div class="order-card__number">
+                            Pedido @order.OrderNumber
+                        </div>
+
+                        <div class="order-card__date">
+                            @order.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+
+                        <div class="mt-2">
+                            Estado: @order.Status
+                        </div>
+                    </div>
+
+                    <div class="order-card__total">
+                        @order.Total.ToString("N2") Bs
+                    </div>
+
+                    <a asp-controller="Orders"
+                       asp-action="Details"
+                       asp-route-id="@order.Id"
+                       class="order-card__button">
+                        Ver detalle
+                    </a>
+                </article>
+            }
+        </div>
+    }
+
+</div>

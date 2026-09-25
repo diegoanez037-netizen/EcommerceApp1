@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EcommerceApp.styles.css" asp-append-version="true" />
+    <link rel="manifest" href="~/manifest.webmanifest" />
+<meta name="theme-color" content="#15100C" />
 </head>
 <body class="dark-theme">
     <header>
@@ -38,7 +40,12 @@
                             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Catálogo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Report" asp-action="Catalogo" target="_blank">📄 Reporte</a>
+                            <a class="nav-link"
+                               asp-area=""
+                               asp-controller="Report"
+                               asp-action="Index">
+                                Reporte
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
@@ -61,6 +68,14 @@
                             }
                         }
 
+                        <li class="nav-item pwa-install-item">
+                            <button type="button"
+                                    id="installAppButton"
+                                    class="nav-link nav-cta pwa-install-button">
+                                Instalar app
+                            </button>
+                        </li>
+
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
@@ -71,7 +86,26 @@
                                         <span class="cart-badge">@cartCount</span>
                                     }
                                 </a>
+                            
                             </li>
+
+<li class="nav-item">
+    <a class="nav-link"
+       asp-controller="Orders"
+       asp-action="Index">
+        Mis pedidos
+    </a>
+</li>
+@if (User.IsInRole("Admin"))
+{
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="AdminOrders"
+           asp-action="Index">
+            Pedidos
+        </a>
+    </li>
+}
                             <li class="nav-item">
                                 <span class="nav-link user-greeting">@User.Identity.Name</span>
                             </li>
@@ -132,5 +166,64 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+            navigator.serviceWorker
+                .register("/service-worker.js?v=1")
+                .catch(function (error) {
+                    console.error("Error al instalar la PWA:", error);
+                });
+        });
+    }
+</script>
+    <script>
+        (function () {
+            const installButton = document.getElementById("installAppButton");
+
+            if (!installButton) {
+                return;
+            }
+
+            let deferredPrompt = null;
+
+            const isStandalone = window.matchMedia(
+                "(display-mode: standalone)"
+            ).matches || window.navigator.standalone === true;
+
+            if (isStandalone) {
+                installButton.hidden = true;
+                return;
+            }
+
+            window.addEventListener("beforeinstallprompt", function (event) {
+                event.preventDefault();
+                deferredPrompt = event;
+                installButton.hidden = false;
+            });
+
+            installButton.addEventListener("click", async function () {
+                if (!deferredPrompt) {
+                    window.alert(
+                        "Para instalar Casa Andina, abre el menú del navegador " +
+                        "y selecciona Instalar aplicación. En iPhone usa " +
+                        "Compartir → Agregar a pantalla de inicio."
+                    );
+                    return;
+                }
+
+                deferredPrompt.prompt();
+
+                await deferredPrompt.userChoice;
+
+                deferredPrompt = null;
+                installButton.hidden = true;
+            });
+
+            window.addEventListener("appinstalled", function () {
+                installButton.hidden = true;
+            });
+        })();
+    </script>
 </body>
 </html>

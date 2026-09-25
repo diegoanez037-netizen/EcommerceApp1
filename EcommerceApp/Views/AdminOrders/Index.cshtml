@@ -1,0 +1,253 @@
+﻿@model List<EcommerceApp.Models.Order>
+@using EcommerceApp.Models
+
+@{
+    ViewData["Title"] = "Administrar pedidos";
+}
+@{
+    var searchValue = ViewBag.Search as string;
+    var selectedStatus = ViewBag.Status as OrderStatus?;
+    var desdeValue = ViewBag.Desde as DateTime?;
+    var hastaValue = ViewBag.Hasta as DateTime?;
+}
+
+<style>
+    .admin-orders {
+        color: #fff8e9;
+    }
+
+    .admin-orders__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .admin-orders__title {
+        margin: 0;
+        font-family: Fraunces, Georgia, serif;
+        font-size: 2.4rem;
+    }
+
+    .admin-orders__subtitle {
+        margin: 0.4rem 0 0;
+        color: #bda78d;
+    }
+
+    .admin-orders__stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .admin-orders__stat {
+        padding: 1.2rem;
+        border: 1px solid #513725;
+        border-radius: 14px;
+        background: #211713;
+    }
+
+    .admin-orders__stat small {
+        display: block;
+        color: #a99276;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .admin-orders__stat strong {
+        display: block;
+        margin-top: 0.4rem;
+        color: #e4b777;
+        font-size: 1.6rem;
+    }
+
+    .admin-orders__table-wrap {
+        overflow-x: auto;
+        border: 1px solid #513725;
+        border-radius: 16px;
+        background: #211713;
+    }
+
+    .admin-orders__table {
+        width: 100%;
+        margin: 0;
+        color: #fff8e9;
+        border-collapse: collapse;
+    }
+
+    .admin-orders__table th {
+        padding: 1rem;
+        color: #e4b777;
+        background: #17100d;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .admin-orders__table td {
+        padding: 1rem;
+        border-top: 1px solid #493323;
+        vertical-align: middle;
+    }
+
+    .admin-orders__table tr:hover td {
+        background: rgba(221, 164, 91, 0.05);
+    }
+
+    .admin-orders__link {
+        display: inline-flex;
+        padding: 0.55rem 0.85rem;
+        border-radius: 9px;
+        color: #1c120c;
+        background: #dda45b;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .admin-orders__link:hover {
+        color: #1c120c;
+        background: #edbd78;
+    }
+</style>
+
+<div class="container admin-orders py-5">
+
+    <div class="admin-orders__header">
+        <div>
+            <h2 class="admin-orders__title">Pedidos realizados</h2>
+            <p class="admin-orders__subtitle">
+                Controla las ventas y el estado de cada compra.
+            </p>
+        </div>
+        <form asp-action="Index"
+      method="get"
+      class="admin-orders__filters">
+
+    <div>
+        <label for="search">Buscar</label>
+        <input type="search"
+               id="search"
+               name="search"
+               value="@searchValue"
+               placeholder="Pedido, cliente o correo" />
+    </div>
+
+    <div>
+        <label for="status">Estado</label>
+        <select id="status" name="status">
+            <option value="">Todos</option>
+
+            @foreach (OrderStatus estado in Enum.GetValues<OrderStatus>())
+            {
+                <option value="@estado"
+                        selected="@(selectedStatus == estado)">
+                    @estado
+                </option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="desde">Desde</label>
+        <input type="date"
+               id="desde"
+               name="desde"
+               value="@desdeValue?.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div>
+        <label for="hasta">Hasta</label>
+        <input type="date"
+               id="hasta"
+               name="hasta"
+               value="@hastaValue?.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div class="admin-orders__filter-actions">
+        <button type="submit" class="admin-orders__link">
+            Filtrar
+        </button>
+
+        <a asp-action="Index"
+           class="admin-orders__clear">
+            Limpiar
+        </a>
+    </div>
+</form>
+        <a asp-controller="Report"
+           asp-action="Index"
+           class="admin-orders__link">
+            Ver reporte
+        </a>
+    </div>
+
+    <div class="admin-orders__stats">
+        <div class="admin-orders__stat">
+            <small>Total de pedidos</small>
+            <strong>@Model.Count</strong>
+        </div>
+
+        <div class="admin-orders__stat">
+            <small>Ventas acumuladas</small>
+            <strong>@Model.Sum(o => o.Total).ToString("N2") Bs</strong>
+        </div>
+
+        <div class="admin-orders__stat">
+            <small>Pendientes</small>
+            <strong>@Model.Count(o => o.Status == OrderStatus.Pendiente)</strong>
+        </div>
+    </div>
+
+    <div class="admin-orders__table-wrap">
+        <table class="admin-orders__table">
+            <thead>
+                <tr>
+                    <th>Pedido</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.OrderNumber</td>
+
+                        <td>
+                            @(order.User?.FullName
+                                ?? order.User?.Email
+                                ?? order.UserId)
+                        </td>
+
+                        <td>
+                            @order.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                        </td>
+
+                        <td>
+                            @order.Total.ToString("N2") Bs
+                        </td>
+
+                        <td>@order.Status</td>
+
+                        <td>
+                            <a asp-controller="AdminOrders"
+                               asp-action="Details"
+                               asp-route-id="@order.Id"
+                               class="admin-orders__link">
+                                Ver
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

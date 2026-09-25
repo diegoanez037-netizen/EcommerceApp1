@@ -15,11 +15,18 @@ namespace EcommerceApp.Controllers
         {
             var query = context.Products.AsNoTracking().AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(search))
+            // Limpia palabras provenientes de voz, por ejemplo: "Cerveza."
+            var normalizedSearch = search?
+                .Trim()
+                .TrimEnd('.', ',', ';', ':', '!', '?');
+
+            if (!string.IsNullOrWhiteSpace(normalizedSearch))
             {
+                var pattern = $"%{normalizedSearch}%";
+
                 query = query.Where(p =>
-                    p.Name.Contains(search) ||
-                    p.Description.Contains(search));
+                    EF.Functions.ILike(p.Name, pattern) ||
+                    EF.Functions.ILike(p.Description, pattern));
             }
 
             if (!string.IsNullOrWhiteSpace(category))
@@ -38,7 +45,7 @@ namespace EcommerceApp.Controllers
 
             ViewBag.TotalCategories = ViewBag.Categories.Count;
             ViewBag.CurrentCategory = category;
-            ViewBag.CurrentSearch = search;
+            ViewBag.CurrentSearch = normalizedSearch;
 
             return View(products);
         }
